@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request, redirect, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import pickle, os
@@ -103,4 +104,4 @@ if __name__ == '__main__':
         else:
             print("users.db already exists")
     print("🚀 Launching Flask server...")
-    app.run(debug=False)
+    app.run(host='0.0.0.0',port=int(os.environ.get("PORT",10000)))
