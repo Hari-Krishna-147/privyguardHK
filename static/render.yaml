@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: privyguard
+    env: python
+    buildCommand: ""
+    startCommand: "python privyguard.py"
+    envVars:
+      - key: FLASK_ENV
+        value: production

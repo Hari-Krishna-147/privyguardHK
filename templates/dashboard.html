@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard | PrivyGuard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+ <script>
+  async function handleAction(action) {
+    const message = document.getElementById('message').value;
+    const route = action === 'check' ? '/predict'
+                 : action === 'encrypt' ? '/encrypt'
+                 : '/decrypt';
+
+    const response = await fetch(route, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: message, encrypted: message })
+    });
+
+    const data = await response.json();
+
+    if (action === 'check') {
+      document.getElementById("spam-result").innerText = data.result || data.error || "Error";
+    } else {
+      const resultText = data.encrypted || data.decrypted || data.error || "Error";
+      document.getElementById("crypto-result").innerText = resultText;
+
+      if (data.encrypted || data.decrypted) {
+             document.getElementById("copy-btn").style.display = 'inline-block';
+      } 
+    }
+  }
+
+  function copyToClipboard() {
+    const text = document.getElementById("crypto-result").innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      showToast("📋 Encrypted text copied!", "success");
+    });
+  }
+
+  function showToast(message, type) {
+    const toast = document.getElementById("toast");
+    toast.innerHTML = message;
+    toast.className = type;
+    toast.style.display = "block";
+    setTimeout(() => {
+      toast.style.display = "none";
+    }, 2000);
+  }
+</script>
+</head>
+<body>
+  <div class="dashboard colorful-container">
+    <h2> Welcome to PrivyGuard</h2>
+
+    <textarea id="message" placeholder="Type your message..."></textarea><br>
+
+    <button onclick="handleAction('check')">Check Spam</button>
+    <button onclick="handleAction('encrypt')">Encrypt</button>
+    <button onclick="handleAction('decrypt')">Decrypt</button>
+
+    <div class="result-box" id="spam-result" style="margin-top: 25px;"></div>
+
+    <div class="result-box" id="crypto-result" style="margin-top: 20px;"></div>
+    <button id="copy-btn" onclick="copyToClipboard()" style="display:none; margin-top: 10px;">Copy</button>
+
+    <div class="form-links" style="margin-top: 20px;">
+      <a href="/logout">🚪 Logout</a>
+      <div id="toast"class="">
+        </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register | PrivyGuard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="form-container">
+    <h2>📝 Create Your PrivyGuard Account</h2>
+
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+      <input type="email" name="email" placeholder="Enter your email" required><br>
+      <input type="password" name="password" placeholder="Create a password" required><br>
+      <button type="submit">Register</button>
+    </form>
+
+    <div class="form-links">
+      <a href="/login">Already have an account? Login</a>
+    </div>
+  </div>
+</body>
+</html>
